@@ -7,7 +7,7 @@ To be used in conjunction with [bnnm's WWiser](https://github.com/bnnm/wwiser) a
 ## Usage
 - if not yet done: use wwiser with the relevant wwnames list to generate relevant files
 - if not yet done: install Python 3.0+
-- unzip zip file somewhere, keeping the two unzipped files in one folder
+- unzip zip file from the releases somewhere, keeping the two unzipped files in one folder
 - open the Dishonored 1 voiceline renamer file by double clicking it or by using the command line to navigate to it and using python to open it
 - specify input directory where "Play_[...]" files are located
 - specify new file formatting by following the instructions
