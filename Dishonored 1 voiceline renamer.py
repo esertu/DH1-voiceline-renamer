@@ -10,7 +10,7 @@ hashList = returnHashList()
 
 ##################
 
-print("DH1 voiceline renamer v1.1")
+print("DH1 voiceline renamer v1.2")
 
 inputdir = None
 inputFormat = None
@@ -372,7 +372,7 @@ for path, dirs, files in os.walk(inputdir):
         if cutinput != "n":
           if cutinput != "y":
             print(f"Input \"{cutinput}\" not recognized, defaulting to yes instead.")
-          finalFilenameFull = finalFilename[:(255-(len(fileExt)+1))] + "." + fileExt
+          finalFilenameFull = finalFilename[:(255-(len(fileExt)+1)-(len(dividerinput)+4+3))] + "." + fileExt #255 minus the length of the file extension plus a period plus the length of the dividerinput plus the length of "copy" plus three placeholder characters for copy numbers
       newFile = os.path.join(inputdir, finalFilenameFull)
       
       # setting what to do with copies of existing files - this might be because it's a copy of an existing voiceline or if there are already renamed files in the input directory from a previous time this script was run
