@@ -22,8 +22,7 @@ To be used in conjunction with [bnnm's WWiser](https://github.com/bnnm/wwiser) a
     - "conversation name": what Conversation package this originates from, can contain Conversation file names ("DisDialogOneShot_18", "DisDialogOneShot_2"), data package names ("L_OvrsrHintJournal_DlgData", "LPbFrmPrsnScrpt_DlgData"), and for some files also oneshot nicknames ("HintConvoBlackJournal", "Pub01a_Piero_First_Meeting").
     - "conversation and blurb id": what Conversation and Blurb ID this line carries, i.e. "DisConversation_6, DisBlurb_15"
     - "text": dialogue text, i.e. "We're not taking this one alive!", "I've learned that our choices always matter to someone, somewhere.". Note that due to filename size limitations it's not possible to fit all dialogue text into all filenames, and due to filename character restrictions many special characters like "?" and "*" will be deleted when text is used in the filename.
-- specify input directory where "Play_[...]" files are located
-- specify new file formatting by following the instructions
+- if no/not all system arguments were used: specify input directory where "Play_[...]" files are located and specify new file formatting by following the instructions
 
 
 ## Legal
