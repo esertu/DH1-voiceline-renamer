@@ -10,6 +10,21 @@ hashList = returnHashList()
 
 ##################
 
+# checking the length of a proposed filename to make sure Windows can actually handle it
+def cutFilename(finalFilename,finalFilenameFull,cutinput,fileExt,dividerinput):
+  if cutinput == None:
+    print(f"Alert: Windows can only handle filenames up to a certain character limit. The proposed filename {finalFilenameFull} would exceed this limit. Would you like to cut this filename down to the limit?")
+    print("    [Y]es (default) (will apply this to all further incidents of overly lengthy filenames as well)")
+    print("    [N]o - this will abort the script.")
+    cutinput = input().lower()
+  if cutinput != "n":
+    if cutinput != "y":
+      print(f"Input \"{cutinput}\" not recognized, defaulting to yes instead.")
+    finalFilenameFull = finalFilename[:(254-(len(fileExt)+1+len(dividerinput)+4+3))] + "." + fileExt #254 minus the length of the file extension plus a period plus the length of the dividerinput plus the length of "copy" plus three placeholder characters for copy numbers
+  return(finalFilenameFull,cutinput)
+
+##################
+
 print("DH1 voiceline renamer v1.2")
 
 inputdir = None
@@ -363,16 +378,8 @@ for path, dirs, files in os.walk(inputdir):
       finalFilename = dividerinput.join(filenameList)
       finalFilenameFull = finalFilename + "." + fileExt
       # checking the length of this proposed filename to make sure Windows can actually handle it
-      if len(finalFilenameFull) > 255:
-        if cutinput == None:
-          print(f"Alert: Windows can only handle filenames up to a certain character limit. The proposed filename {finalFilenameFull} would exceed this limit. Would you like to cut this filename down to the limit?")
-          print("    [Y]es (default) (will apply this to all further incidents of overly lengthy filenames as well)")
-          print("    [N]o - this will abort the script.")
-          cutinput = input().lower()
-        if cutinput != "n":
-          if cutinput != "y":
-            print(f"Input \"{cutinput}\" not recognized, defaulting to yes instead.")
-          finalFilenameFull = finalFilename[:(255-(len(fileExt)+1)-(len(dividerinput)+4+3))] + "." + fileExt #255 minus the length of the file extension plus a period plus the length of the dividerinput plus the length of "copy" plus three placeholder characters for copy numbers
+      if len(finalFilenameFull) > 254:
+        finalFilenameFull,cutinput = cutFilename(finalFilename,finalFilenameFull,cutinput,fileExt,dividerinput)
       newFile = os.path.join(inputdir, finalFilenameFull)
       
       # setting what to do with copies of existing files - this might be because it's a copy of an existing voiceline or if there are already renamed files in the input directory from a previous time this script was run
@@ -419,6 +426,13 @@ for path, dirs, files in os.walk(inputdir):
                 newFile = testingNewFile
                 copynumberfound = True
                 finalFilenameFull = testingNewName
+                # checking the length of this proposed filename to make sure Windows can actually handle it
+                fullext = len(fileExt)+1
+                fullext = fullext * -1
+                if len(finalFilenameFull) > 254:
+                  finalFilenameFull,cutinput = cutFilename(finalFilename,finalFilenameFull,cutinput,fileExt,dividerinput)
+                  finalFilenameFull = finalFilenameFull[:fullext] + dividerinput + "copy" + str(testingint) + "." + fileExt
+                  newFile = os.path.join(inputdir, finalFilenameFull)
           elif copyBehavior == "oa" or copyBehavior == "o":
             # if this is a copy of an existing file and the user chose to have copies overwrite:
             # deleting the existing file so that the new file can safely be renamed to that file's name
