@@ -121,7 +121,7 @@ while alldone != True:
   # setting package or conversation names if applicable
   if packageNameInput == None:
     if len(orderChosen) > 0:
-      if "onversation name" in orderChosen:
+      if "conversation name" in orderChosen:
         print("")
         print("Many Conversations can be referred to by multipled different names. These are Conversation file names (\"DisDialogOneShot_18\", \"DisDialogOneShot_2\"), data package names (\"L_OvrsrHintJournal_DlgData\", \"LPbFrmPrsnScrpt_DlgData\"), and for some files also oneshot nicknames (\"HintConvoBlackJournal\", \"Pub01a_Piero_First_Meeting\"). Which of these names would you like to be used?")
         print("    [D] - data package names only")
