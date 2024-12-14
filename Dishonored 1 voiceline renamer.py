@@ -297,40 +297,50 @@ for path, dirs, files in os.walk(inputdir):
       for item in hashList[fileName]:
         if item.startswith("file:") == True:
           filename = item.replace("file:","")
-          if "map name" in orderChosen:
-            filenameList.insert(orderChosen.index("map name"),filename)
+          filename = filename.strip()
+          if filename != "":
+            if "map name" in orderChosen:
+              filenameList.insert(orderChosen.index("map name"),filename)
         elif item.startswith("conv:") == True:
           convFilename = item.replace("conv:","")
-          if "conversation name" in orderChosen:
-            if packageNameInput == "c":
-              if convFilename.find("(") != -1: #cutting out the (oneshot nickname) at the end if applicable
-                filenameList.insert(orderChosen.index("conversation name"),convFilename[:convFilename.find("(")-1])
-              else:
+          convFilename = convFilename.strip()
+          if convFilename != "":
+            if "conversation name" in orderChosen:
+              if packageNameInput == "c":
+                if convFilename.find("(") != -1: #cutting out the (oneshot nickname) at the end if applicable
+                  filenameList.insert(orderChosen.index("conversation name"),convFilename[:convFilename.find("(")-1])
+                else:
+                  filenameList.insert(orderChosen.index("conversation name"),convFilename)
+              elif packageNameInput == "co":
                 filenameList.insert(orderChosen.index("conversation name"),convFilename)
-            elif packageNameInput == "co":
-              filenameList.insert(orderChosen.index("conversation name"),convFilename)
         elif item.startswith("nick:") == True:
           convNickname = item.replace("nick:","")
-          if "conversation name" in orderChosen:
-            if packageNameInput == "d":
-              if convNickname.find("(") != -1: #cutting out the (oneshot nickname) at the end if applicable
-                filenameList.insert(orderChosen.index("conversation name"),convNickname[:convNickname.find("(")-1])
-              else:
+          convNickname = convNickname.strip()
+          if convNickname != "":
+            if "conversation name" in orderChosen:
+              if packageNameInput == "d":
+                if convNickname.find("(") != -1: #cutting out the (oneshot nickname) at the end if applicable
+                  filenameList.insert(orderChosen.index("conversation name"),convNickname[:convNickname.find("(")-1])
+                else:
+                  filenameList.insert(orderChosen.index("conversation name"),convNickname)
+              elif packageNameInput == "do":
                 filenameList.insert(orderChosen.index("conversation name"),convNickname)
-            elif packageNameInput == "do":
-              filenameList.insert(orderChosen.index("conversation name"),convNickname)
         elif item.startswith("char:") == True:
           charName = item.replace("char:","")
-          if "character name" in orderChosen:
-            filenameList.insert(orderChosen.index("character name"),charName)
+          charName = charName.strip()
+          if charName != "":
+            if "character name" in orderChosen:
+              filenameList.insert(orderChosen.index("character name"),charName)
         elif item.startswith("id:") == True:
-          if "conversation and blurb id" in orderChosen:
-            if convBlurbID != "[NoConvBlurbID]":
-              convBlurbID = convBlurbID + dividerinput + item.replace("id:","")
-              filenameList[orderChosen.index("conversation and blurb id")] = convBlurbID
-            else:
-              convBlurbID = item.replace("id:","")
-              filenameList.insert(orderChosen.index("conversation and blurb id"),convBlurbID)
+          newID = item.replace("id:","")
+          newID = newID.strip()
+          if newID != "":
+            if "conversation and blurb id" in orderChosen:
+              if convBlurbID != "[NoConvBlurbID]":
+                convBlurbID = convBlurbID + dividerinput + newID
+                filenameList[orderChosen.index("conversation and blurb id")] = convBlurbID
+              else:
+                filenameList.insert(orderChosen.index("conversation and blurb id"),newID)
         elif item.startswith("dlc:") == True:
           if dlcformat != None:
             DLCNumber = item.replace("dlc:dlc0","")
@@ -340,9 +350,10 @@ for path, dirs, files in os.walk(inputdir):
           if "text" in orderChosen:
             newText = item.replace("text:","").replace("\\","").replace("/","").replace(":","").replace("*","").replace("?","").replace("\"","").replace("<","").replace(">","").replace("|","") #removing parts of the text that can't be used as filenames
             newText = newText.strip()
-            if newText.endswith(".") == True: # ending periods are also problematic
-              newText = newText[:-1]
-            filenameList.insert(orderChosen.index("text"),newText)
+            if newText != "":
+              if newText.endswith(".") == True: # ending periods are also problematic
+                newText = newText[:-1]
+              filenameList.insert(orderChosen.index("text"),newText)
       
       # adding this now, see above for explanation
       if DLCName != None:
