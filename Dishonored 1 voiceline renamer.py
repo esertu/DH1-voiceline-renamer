@@ -10,22 +10,32 @@ hashList = returnHashList()
 
 ##################
 
+# accounting for the user using square brackets around their response
+def inputF():
+  text = input()
+  textSanitized = text.strip()
+  if textSanitized.startswith("[") == True:
+    textSanitized = textSanitized[1:]
+  if textSanitized.endswith("]") == True:
+    textSanitized = textSanitized[:-1]
+  return(textSanitized)
+
 # checking the length of a proposed filename to make sure Windows can actually handle it
 def cutFilename(finalFilename,finalFilenameFull,cutinput,fileExt,dividerinput):
   if cutinput == None:
     print(f"Alert: Windows can only handle filenames up to a certain character limit. The proposed filename {finalFilenameFull} would exceed this limit. Would you like to cut this filename down to the limit?")
     print("    [Y]es (default) (will apply this to all further incidents of overly lengthy filenames as well)")
     print("    [N]o - this will abort the script.")
-    cutinput = input().lower()
+    cutinput = inputF()().lower()
   if cutinput != "n":
     if cutinput != "y":
-      print(f"Input \"{cutinput}\" not recognized, defaulting to yes instead.")
+      print(f"Input \"{cutinput}\" not recognized, defaulting to yes instead. (Available correct inputs: y, n)")
     finalFilenameFull = finalFilename[:(254-(len(fileExt)+1+len(dividerinput)+4+3))] + "." + fileExt #254 minus the length of the file extension plus a period plus the length of the dividerinput plus the length of "copy" plus three placeholder characters for copy numbers
   return(finalFilenameFull,cutinput)
 
 ##################
 
-print("DH1 voiceline renamer v1.2")
+print("DH1 voiceline renamer v1.3")
 
 inputdir = None
 inputFormat = None
@@ -95,7 +105,7 @@ if len(orderChosen) == 0:
   print("Customize filename formatting?")
   print("    [Y]es")
   print("    [N]o (default)")
-  defaultinput = input().lower()
+  defaultinput = inputF().lower()
   if defaultinput == "n":
     print("Leaving formatting options default.")
     formatSet = True
@@ -103,7 +113,7 @@ if len(orderChosen) == 0:
     print("Commencing formatting option setting.")
     print("")
   else:
-    print("Input not recognized, defaulting to using default filename formatting.")
+    print(f"Input \"{defaultinput}\" not recognized, defaulting to using default filename formatting. (Available correct inputs: y, n)")
     formatSet = True
     
 alldone = False
@@ -117,7 +127,7 @@ while alldone != True:
       for option in orderOptions:
         print("    " + option)
       print("Please write your choice below and hit enter, or write \"finish\" and hit enter if you've input all your choices without using all possible data inputs in your filename format:")
-      choiceinput = input().lower()
+      choiceinput = inputF().lower()
       if choiceinput in orderOptions:
         print(f"Slot {n} will be filled by {choiceinput}.")
         orderChosen.append(choiceinput)
@@ -128,7 +138,7 @@ while alldone != True:
         print("Aborting filename formatting customization and using the default format after all.")
         break
       elif choiceinput != "finish":
-        print(f"Input \"{choiceinput}\" not recognized, please try again.")
+        print(f"Input \"{choiceinput}\" not recognized, please try again. (Available correct inputs: {', '.join(orderOptions)}")
       if n > 5 or choiceinput == "finish":
         formatSet = True
         break
@@ -143,7 +153,7 @@ while alldone != True:
         print("    [DO] - data package names (oneshot nicknames in brackets) (default)")
         print("    [C] - Conversation file names only")
         print("    [CO] - Conversation file names (oneshot nicknames in brackets)")
-        packageNameInput = input().lower()
+        packageNameInput = inputF().lower()
         if packageNameInput == "d":
           print("Conversation names set, using data package names only.")
         elif packageNameInput == "do":
@@ -156,8 +166,8 @@ while alldone != True:
           print("Aborting filename formatting customization and using the default format after all.")
           orderChosen = []
         else:
-          print(f"Input \"{packageNameInput}\" not recognized, defaulting to using data package names.")
-          orderChosen = []
+          print(f"Input \"{packageNameInput}\" not recognized, defaulting to using data package names (with oneshot nicknames in brackets). (Available correct inputs: d, do, c, co)")
+          packageNameInput = "do"
       
   # setting DLC name options
   if dlcformat == None:
@@ -166,13 +176,13 @@ while alldone != True:
       print("Would you like all DLC files to start with an additional slot that marks it as belonging to a DLC? Note that many DLC items already have non standardized prefixes or suffixes in their filenames to denote their belonging to a DLC, this is simply meant to better organize the files.")
       print("    [Y]es")
       print("    [N]o (default)")
-      dlcinput = input().lower()
+      dlcinput = inputF().lower()
       if dlcinput == "y":
         print("What format would you like this additional part of the filename to have?")
         print("    [Number] - DLC05/DLC06/DLC07 (default)")
         print("    [Name] - DunwallCityTrials/TheKnifeOfDunwall/TheBrigmoreWitches")
         print("    [Abbreviation] - DCT/TKoD/TBW")
-        dlcformatinput = input().lower()
+        dlcformatinput = inputF().lower()
         if dlcformatinput == "number":
           print("DLC files will be preceeded by DLC05/DLC06/DLC07.")
           dlcformat = dlcformatinput
@@ -186,13 +196,13 @@ while alldone != True:
           print("Aborting filename formatting customization and using the default format after all.")
           orderChosen = []
         else:
-          print(f"Input \"{dlcinput}\" not recognized, defaulting to DLC files being preceeded by DLC05/DLC06/DLC07.")
+          print(f"Input \"{dlcformatinput}\" not recognized, defaulting to DLC files being preceeded by DLC05/DLC06/DLC07. (Available correct inputs: number, name, abbreviation)")
           dlcformat = "number"
       elif dlcinput == "n":
         print("No additional part will be added to the filename of DLC files.")
         dlcformat = None
       else:
-        print(f"Input \"{dlcinput}\" not recognized, defaulting to not adding any additional part to the filename of DLC files.")
+        print(f"Input \"{dlcinput}\" not recognized, defaulting to not adding any additional part to the filename of DLC files. (Available correct inputs: y, n)")
         dlcformat = None
         
   if dlcformat == "number" or dlcformat == "name" or dlcformat == "abbreviation":
@@ -211,16 +221,15 @@ while alldone != True:
 
   # setting the divider between data in the filename
   if dividerinput == None:
-    if (len(orderChosen) > 1) or (len(orderChosen) > 0 and dlcformat != None):
-      print("")
-      print("Please write your choice for the divider between slots below and hit enter. Default is .")
-      dividerinput = input()
-      if dividerinput.find("\\") != -1 or dividerinput.find("/") != -1 or dividerinput.find(":") != -1 or dividerinput.find("*") != -1 or dividerinput.find("?") != -1 or dividerinput.find("\"") != -1 or dividerinput.find("<") != -1 or dividerinput.find(">") != -1 or dividerinput.find("\\") != -1 or dividerinput.find("|") != -1:
-        dividerinput = dividerinput.replace("\\","").replace("/","").replace(":","").replace("*","").replace("?","").replace("\"","").replace("<","").replace(">","").replace("|","") #removing parts of the text that can't be used as filenames
-        print(f"Forbidden character detected in divider input, using the sanitized {dividerinput} instead.")
-      if dividerinput.lower() == "cancel":
-        print("Aborting filename formatting customization and using the default format after all.")
-        orderChosen = []
+    print("")
+    print("Please write your choice for the divider between slots below and hit enter. Default is .")
+    dividerinput = inputF()
+    if dividerinput.find("\\") != -1 or dividerinput.find("/") != -1 or dividerinput.find(":") != -1 or dividerinput.find("*") != -1 or dividerinput.find("?") != -1 or dividerinput.find("\"") != -1 or dividerinput.find("<") != -1 or dividerinput.find(">") != -1 or dividerinput.find("\\") != -1 or dividerinput.find("|") != -1:
+      dividerinput = dividerinput.replace("\\","").replace("/","").replace(":","").replace("*","").replace("?","").replace("\"","").replace("<","").replace(">","").replace("|","") #removing parts of the text that can't be used as filenames
+      print(f"Forbidden character detected in divider input, using the sanitized {dividerinput} instead.")
+    if dividerinput.lower() == "cancel":
+      print("Aborting filename formatting customization and using the default format after all.")
+      orderChosen = []
 
   # setting everything to default values if needed
   if len(orderChosen) == 0:
@@ -263,7 +272,7 @@ while alldone != True:
   print("Is this correct?")
   print("    [Y]es (default)")
   print("    [N]o")
-  correctinput = input().lower()
+  correctinput = inputF().lower()
   if correctinput == "n":
     print("Running formatting options setting again...")
   elif correctinput == "y":
@@ -275,7 +284,7 @@ while alldone != True:
     print("Aborting filename formatting customization and using the default format after all.")
     aborted = True
   else:
-    print(f"Input \"{correctinput}\" not recognized, defaulting to yes instead.")
+    print(f"Input \"{correctinput}\" not recognized, defaulting to yes instead. (Available correct inputs: y, n)")
     print("Formatting options setting done!")
     print("")
     alldone == True
@@ -388,7 +397,7 @@ for path, dirs, files in os.walk(inputdir):
           print(f"While trying rename file {oldFile} to {finalFilenameFull}, a file with the name {finalFilenameFull} was found in the output directory. Do you want to overwrite the existing file or add \"copy[number]\" to the name of the new copy?")
           print("    [O] - overwrite existing file")
           print("    [C] - add \"copy[number]\" to the name of the new copy (default)")
-          copyBehaviorInput = input().lower()
+          copyBehaviorInput = inputF().lower()
           if copyBehaviorInput == "o":
             print("Existing file will be overwritten.")
             copyBehavior = "o"
@@ -396,19 +405,19 @@ for path, dirs, files in os.walk(inputdir):
             print("Adding \"copy[number]\" to the name of the new copy.")
             copyBehavior = "c"
           else:
-            print(f"Input \"{copyBehaviorInput}\" not recognized, defaulting to adding \"copy[number]\" to the name of the new copy.")
+            print(f"Input \"{copyBehaviorInput}\" not recognized, defaulting to adding \"copy[number]\" to the name of the new copy. (Available correct inputs: o, c)")
             copyBehavior = "c"
           if len(copyBehavior) == 1: # if this is true, then the copyBehavior setting was just run for the first time (or last time the user chose to have it apply only to one file)
             print("Apply this behavior to all name conflicts or just to this single file?")
             print("    [A] - apply to all")
             print("    [S] - apply to just this single file (default)")
-            copyBehaviorInput = input().lower()
+            copyBehaviorInput = inputF().lower()
             if copyBehaviorInput == "a":
               copyBehavior = copyBehavior + "a"
             elif copyBehaviorInput == "s":
               print(f"Applying this to just this single file.")
             else:
-              print(f"Input \"{copyBehaviorInput}\" not recognized, defaulting to only applying this to just this single file.")
+              print(f"Input \"{copyBehaviorInput}\" not recognized, defaulting to only applying this to just this single file. (Available correct inputs: a, s)")
               
         if copyBehavior != None:
           if copyBehavior == "ca" or copyBehavior == "c":
