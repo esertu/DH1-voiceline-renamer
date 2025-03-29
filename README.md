@@ -9,8 +9,8 @@ To be used in conjunction with [bnnm's WWiser](https://github.com/bnnm/wwiser) a
 - use the browse button to specify an input directory where the relevant files are located
 - drag and drop one or more items onto the empty slots to specify the format you want your filename(s) to be in
   - more information about each item can be found by hovering over it with your cursor
-  - use the "different random example sentence" to pull new random example voicelines that follow your specified format to check if it's to your liking
   - specify details of the formats by deciding if you want to include special markers for DLC files, what Conversation names should be used, and/or what divider should be used between elements of the filename
+  - use the "different random example sentence" to pull new random example voicelines that follow your specified format to check if it's to your liking
 - click rename and wait until a success/error message appears
   - Should conflicts (duplicate files, overly long filenames) occur, make your decisions on how to treat them in the relevant popup windows.
 
